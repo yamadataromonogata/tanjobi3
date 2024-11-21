@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>素敵なヒントへの道</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2ecc71; /* クールなグリーン色 */
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      text-align: center;
+      max-width: 600px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .question {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    .input-container {
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 10px;
+      font-size: 1rem;
+      width: 80%;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1e8449;
+    }
+    .final-message {
+      font-size: 1.2rem;
+      margin-top: 20px;
+      animation: fadeIn 2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <div class="question" id="question">僕らのアイドルが苦手な物の中</div>
+    <div class="input-container">
+      <input type="text" id="answer" placeholder="回答を入力してください">
+    </div>
+    <button onclick="checkAnswer()">送信</button>
+    <div class="final-message" id="finalMessage" style="display: none;">
+      最後のヒントへ辿り着くにはこれまで手にしたものを集結させてください
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { question: "僕らのアイドルが苦手な物の中", answer: "0001" },
+      { question: "愛　耐　笑　誠　の裏返し", answer: "0009" },
+      { question: "ストック　右から4上から3", answer: "1000" },
+      { question: "美味しーいハムとチーズ", answer: "0120" },
+    ];
+    const finalAnswer = "1130";
+    const finalUrl = "https://yamadataromonogata.github.io/tanjobihinto/";
+    let currentIndex = 0;
+
+    function checkAnswer() {
+      const userAnswer = document.getElementById("answer").value.trim();
+      const questionElement = document.getElementById("question");
+      const containerElement = document.getElementById("container");
+      const finalMessageElement = document.getElementById("finalMessage");
+
+      if (currentIndex < questions.length && userAnswer === questions[currentIndex].answer) {
+        currentIndex++;
+        if (currentIndex < questions.length) {
+          questionElement.textContent = questions[currentIndex].question;
+          document.getElementById("answer").value = ""; // 入力をリセット
+        } else {
+          // 最後のヒントを表示
+          finalMessageElement.style.display = "block";
+          setTimeout(() => {
+            // 質問と入力欄だけを表示
+            containerElement.innerHTML = `
+              <div class="question">最後のヒントを入力してください</div>
+              <div class="input-container">
+                <input type="text" id="answer" placeholder="回答を入力してください">
+              </div>
+              <button onclick="checkFinalAnswer()">送信</button>
+            `;
+          }, 2000);
+        }
+      } else if (currentIndex === questions.length) {
+        checkFinalAnswer();
+      } else {
+        alert("間違っています。もう一度お試しください。");
+      }
+    }
+
+    function checkFinalAnswer() {
+      const userAnswer = document.getElementById("answer").value.trim();
+      if (userAnswer === finalAnswer) {
+        window.location.href = finalUrl; // 指定されたURLに遷移
+      } else {
+        alert("間違っています。もう一度お試しください。");
+      }
+    }
+  </script>
+</body>
+</html>
